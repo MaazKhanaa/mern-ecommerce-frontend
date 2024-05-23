@@ -27,7 +27,11 @@ const Login = () => {
         })
         result = await result.json();
         localStorage.setItem('user', JSON.stringify(result));
+        if(!result.email || !result.password) {
+            alert("Incorrect password or email")
+        } else {
         navigate('/')
+        }
     }
     return (
         <div>
@@ -43,7 +47,7 @@ const Login = () => {
               <label>Password</label>
               <input type="password" name="password" onChange={handleInputChange} value={password} placeholder="Enter your password" />
             </div>
-            <button type="submit" className="primary-btn">Sign Up</button>
+            <button type="submit" className="primary-btn">Login</button>
           </form>
         </div>
       </div>
