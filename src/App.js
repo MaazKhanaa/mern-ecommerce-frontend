@@ -4,6 +4,7 @@ import Header from "./layout/header";
 import Footer from "./layout/footer";
 import SignUp from "./auth/signup";
 import PrivateComponent from "./components/privateComponent";
+import Login from "./auth/login";
 
 function App() {
   return (
@@ -23,6 +24,7 @@ function App() {
                 <Route path="/profile" element={<h1>Profile Page</h1>} />
               </Route>
               <Route path="/signup" element={<SignUp />} />
+              <Route path="/login" element={<Login />} />
             </Routes>
           </div>
           <div>

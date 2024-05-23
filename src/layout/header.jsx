@@ -28,6 +28,9 @@ const Header = () => {
           <li>
             {auth ? <Link className="primary-btn" onClick={logout} to="/signup">Logout</Link> : <Link className="primary-btn" to="/signup">Sign Up</Link> }
           </li>
+          <li>
+            {!auth && <Link className="primary-btn" to="/login">Login</Link> }
+          </li>
           {auth && <li>
             <Link to="/profile">Profile</Link>
           </li>}
