@@ -7,26 +7,25 @@ const Header = () => {
 
   const logout = () => {
     localStorage.clear();
+    debugger
+    navigate("/login")
   }
   return (
     <div className="d-flex justify-content-between top-header align-items-center">
       <div>
-        <ul>
+        {auth && <ul>
           <li>
             <Link to="/">Products</Link>
           </li>
           <li>
             <Link to="/add">Add Products</Link>
           </li>
-          <li>
-            <Link to="/update">Update Products</Link>
-          </li>
-        </ul>
+        </ul>}
       </div>
       <div>
         <ul className="align-items-center">
           <li>
-            {auth ? <Link className="primary-btn" onClick={logout} to="/signup">Logout</Link> : <Link className="primary-btn" to="/signup">Sign Up</Link> }
+            {auth ? <Link className="primary-btn" onClick={logout} to="/login">Logout</Link> : <Link className="primary-btn" to="/signup">Sign Up</Link> }
           </li>
           <li>
             {!auth && <Link className="primary-btn" to="/login">Login</Link> }

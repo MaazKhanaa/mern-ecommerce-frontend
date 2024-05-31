@@ -5,6 +5,9 @@ import Footer from "./layout/footer";
 import SignUp from "./auth/signup";
 import PrivateComponent from "./components/privateComponent";
 import Login from "./auth/login";
+import AddProducts from "./components/addProduct";
+import ProductsList from "./components/productsList";
+import UpdateProduct from "./components/updateProduct";
 
 function App() {
   return (
@@ -17,9 +20,9 @@ function App() {
           <div className="content-wrapper">
             <Routes>
               <Route element={<PrivateComponent />}>
-                <Route path="/" element={<h1>Products List</h1>} />
-                <Route path="/add" element={<h1>Add Products</h1>} />
-                <Route path="/update" element={<h1>Update Products</h1>} />
+                <Route path="/" element={<ProductsList />} />
+                <Route path="/add" element={<AddProducts />} />
+                <Route path="/update/:id" element={<UpdateProduct />} />
                 <Route path="/logout" element={<h1>Logout Page</h1>} />
                 <Route path="/profile" element={<h1>Profile Page</h1>} />
               </Route>
