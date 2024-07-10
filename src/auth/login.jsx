@@ -1,10 +1,13 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useLoginUserMutation } from "../rtkQuery/createApi.ts";
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
+
+  const [loginUser] = useLoginUserMutation()
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -17,14 +20,8 @@ const Login = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    let result = await fetch("http://localhost:5000/login", {
-      method: "post",
-      body: JSON.stringify({ email, password }),
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
-    result = await result.json();
+    const result = await loginUser({email, password}).unwrap();
+    console.log("RTK REsult", result)
     if (result?.auth) {
       localStorage.setItem("user", JSON.stringify(result.user));
       localStorage.setItem("token", JSON.stringify(result.auth));

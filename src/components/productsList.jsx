@@ -1,38 +1,32 @@
 import React from "react";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { useDeleteProductMutation, useGetProductsQuery } from "../rtkQuery/createApi.ts";
 
 const ProductsList = () => {
-  const [products, setProducts] = useState([]);
 
-  const getProducts = async () => {
-    const response = await fetch("http://localhost:5000/products", {
-      headers: {
-        authorization: JSON.stringify(localStorage.getItem('token'))
-      }
-    });
-    const result = await response.json();
-    setProducts(result);
-  };
-  useEffect(() => {
-    getProducts();
-  }, []);
+  const { data: products, error, isLoading, isError } = useGetProductsQuery();
+  const [deleteProduct] = useDeleteProductMutation();
 
   const handleDelete = async (id) => {
-    let deleteRec = await fetch(`http://localhost:5000/product/${id}`, {
-        method: "Delete"
-    })
-    deleteRec = await deleteRec.json();
-    if(deleteRec) {
-        getProducts();
+    try {
+      await deleteProduct(id).unwrap()
+    } catch {
+      console.error("Failed to Delete the Product")
     }
   }
-  console.log(products);
   return (
     <div className="container">
       <h1>Products List</h1>
       <div className="row">
-        {products.map((item, index) => (
+        {
+        isLoading ? (
+          <p className="text-center">Loading...</p>
+        ) : isError ? (
+          <p className="text-center">
+            {error.error || "Something went wrong"}
+          </p>
+        ) : ( products.map((item, index) => (
           <div className="col-sm-3 mb-4" key={index}>
             <div className="card p-2">
               <div className="row">
@@ -70,15 +64,22 @@ const ProductsList = () => {
 
               <div className="row">
                 <div className="col-6">
-                  <Link to={`update/${item._id}`} className="btn btn-info">Update</Link>
+                  <Link to={`update/${item._id}`} className="btn btn-info">
+                    Update
+                  </Link>
                 </div>
                 <div className="col-6">
-                    <button className="btn btn-danger" onClick={() => handleDelete(item.id)}>Delete</button>
+                  <button
+                    className="btn btn-danger"
+                    onClick={() => handleDelete(item.id)}
+                  >
+                    Delete
+                  </button>
                 </div>
               </div>
             </div>
           </div>
-        ))}
+        )))}
       </div>
     </div>
   );

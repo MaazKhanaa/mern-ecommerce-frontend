@@ -1,12 +1,15 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useSignUpUserMutation } from "../rtkQuery/createApi.ts";
 
 const SignUp = () => {
 
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const navigate = useNavigate()
+    const navigate = useNavigate();
+
+    const [signUser] = useSignUpUserMutation()
 
     const handleInputChange = (e) => {
         const { name, value } = e.target;
@@ -21,15 +24,8 @@ const SignUp = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        console.log(name, email, password);
-        let result = await fetch("http://localhost:5000/register", {
-            method: 'post',
-            body: JSON.stringify({name, email, password}),
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        })
-        result = await result.json();
+        let result = await signUser({name, email, password}).unwrap()
+        console.log("New User", result)
         localStorage.setItem('user', JSON.stringify(result.result))
         localStorage.setItem('token', JSON.stringify(result.auth))
         navigate('/')

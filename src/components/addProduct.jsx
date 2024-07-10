@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useAddProductMutation } from "../rtkQuery/createApi.ts";
 
 const AddProducts = () => {
     const [name, setName] = useState('')
@@ -6,20 +7,13 @@ const AddProducts = () => {
     const [category, setCategory] = useState('')
     const [brand, setBrand] = useState('')
 
+    const [addProdcut] = useAddProductMutation()
+
     const handleSubmit = async (e) => {
         e.preventDefault();
         const userId = JSON.parse(localStorage.getItem("user"))._id;
-        const response = await fetch("http://localhost:5000/add-product", {
-            method: "post",
-            body: JSON.stringify({name, price, category, brand, userId}),
-            headers: {
-                "Content-Type": "application/json"
-            }
-        })
-        const result = await response.json();
-        console.log(result);
-
-        if (response.ok) {
+        const response = await addProdcut({name, price, category, brand, userId})
+        if (response) {
             setName('');
             setPrice('');
             setCategory('');

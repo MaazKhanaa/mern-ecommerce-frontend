@@ -1,53 +1,35 @@
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
+import { useGetProductQuery, useUpdateProductMutation } from "../rtkQuery/createApi.ts";
 
 const UpdateProduct = () => {
     const [name, setName] = useState('');
     const [price, setPrice] = useState('');
     const [category, setCategory] = useState('');
     const [brand, setBrand] = useState('');
-    const params = useParams();
-    const navigate = useNavigate()
+    const {id} = useParams();
+    const navigate = useNavigate();
 
-    const getProductData = async () => {
-        console.log(params.id)
-        try {
-            const response = await fetch(`http://localhost:5000/product/${params.id}`);
-            if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
-            }
-            const updateData = await response.json();
-            console.log(updateData);
-            // Set the state with the fetched data
-            setName(updateData.name);
-            setPrice(updateData.price);
-            setCategory(updateData.category);
-            setBrand(updateData.brand);
-        } catch (error) {
-            console.error('Error fetching product data:', error);
-        }
-    };
+    const { data: product } = useGetProductQuery(id);
+    const [updateproduct] = useUpdateProductMutation();
 
     useEffect(() => {
-        getProductData();
-    }, []);
+        if(product) {
+            setName(product.name);
+            setPrice(product.price);
+            setCategory(product.category);
+            setBrand(product.brand);
+        }
+    }, [product])
+
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        console.log(name, brand, category, price);
         try {
-            let updateProdData = await fetch(`http://localhost:5000/product/${params.id}`, {
-                method: "PUT",
-                body: JSON.stringify({name, price, category, brand}),
-                headers: {
-                    "Content-Type": "application/json"
-                }
-            })
-            let resultData = await updateProdData.json();
-            navigate("/")
-            console.log(resultData);
-        } catch(err) {
-            console.log(err)
+            await updateproduct({id, name, brand, category, price}).unwrap();
+            navigate("/");
+        } catch {
+            console.error("Failed Updating Data")
         }
     };
 
