@@ -12,7 +12,7 @@ const UpdateProduct = () => {
 
     const { data: product } = useGetProductQuery(id);
     const [updateproduct] = useUpdateProductMutation();
-
+    
     useEffect(() => {
         if(product) {
             setName(product.name);
@@ -21,8 +21,6 @@ const UpdateProduct = () => {
             setBrand(product.brand);
         }
     }, [product])
-
-
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
@@ -32,7 +30,6 @@ const UpdateProduct = () => {
             console.error("Failed Updating Data")
         }
     };
-
     return (
         <div>
             <div className="row justify-content-center mx-0">
