@@ -15,7 +15,7 @@ const ProductsList = () => {
       console.error("Failed to Delete the Product")
     }
   }
-  return (
+   return (
     <div className="container">
       <h1>Products List</h1>
       <div className="row">
